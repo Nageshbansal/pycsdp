@@ -29,13 +29,13 @@ all: nl_mvu_pca_dmoss_kemoss
 nl_mvu_pca_dmoss_kemoss: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C Linker'
-	gcc  -o "nl_mvu_pca_dmoss_kemoss" $(OBJS) $(USER_OBJS) $(LIBS)
+	gcc -fPIC -shared -o nl_mvu_pca_dmoss_kemoss.so $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(OBJS)$(C_DEPS)$(EXECUTABLES) nl_mvu_pca_dmoss_kemoss
+	-$(RM) $(OBJS)$(C_DEPS)$(EXECUTABLES) nl_mvu_pca_dmoss_kemoss.so
 	-@echo ' '
 
 .PHONY: all clean dependents

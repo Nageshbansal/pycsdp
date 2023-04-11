@@ -29,7 +29,7 @@ C_DEPS += \
 %.o: ../%.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C Compiler'
-	gcc -DVERSION=\"1.0\" -O3 -Wall -c -fmessage-length=0 -DNOSHORTS -ansi -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o"$@" "$<"
+	gcc -fPIC 	-DVERSION=\"1.0\" -O3 -Wall -c -fmessage-length=0 -DNOSHORTS -ansi -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o"$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

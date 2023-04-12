@@ -1,16 +1,8 @@
-"""API defining checkpoint."""
-import os
 import sys
-_ROOT = os.path.abspath(os.path.dirname(__file__))
-
-
-def get_pca(file):
-    """Return the path of data file from data directory."""
-    return os.path.normpath(os.path.join(_ROOT, 'pca', file))
-
+import os
 
 if sys.version_info[:2] >= (3, 8):
-    # TODO: Import directly (no need for conditional) when `python_requires = >= 3.8`
+
     from importlib.metadata import PackageNotFoundError, version  # pragma: no cover
 else:
     from importlib_metadata import PackageNotFoundError, version  # pragma: no cover
@@ -23,3 +15,6 @@ except PackageNotFoundError:  # pragma: no cover
     __version__ = "unknown"
 finally:
     del version, PackageNotFoundError
+
+
+_ROOT = os.path.abspath(os.path.dirname(__file__))

@@ -18,6 +18,18 @@
 
 #include "global.h"
 
+void my_c_function(double *data, int nrows, int ncols) {
+    double (*arr)[ncols] = (double (*)[ncols]) data;
+    int i,j ;
+    printf("Array received from Python:\n");
+    printf("%f ", arr[0][0]);
+    printf("%f ", arr[0][1]);
+    printf("%f ", arr[0][2]);
+    printf("%f ", arr[0][3]);
+    printf("%f ", arr[0][4]);
+
+}
+
 int main(int argc, char *argv[]) {
 
     FILE *infile;

@@ -1,7 +1,6 @@
 import numpy as np
-import sys
 import subprocess
-from os.path import dirname, abspath, join
+
 
 # target:  is to execute both makefiles in nl_mvu_pca_dmoss and
 # l_pca_dmoss_kemoss. get the output...that is a string. We need
@@ -23,12 +22,13 @@ def make_obj_red(path):
         f"make clean -C {path} && make -C {path}", stderr=subprocess.STDOUT,
         shell=True)
 
-    # subprocess.Popen(
-    #     "make -C {path}", stderr=subprocess.STDOUT, shell=True
-    # )
+    stdout, stderr = process.communicate()
 
     if process.wait() != 0:
         print('Something went wrong, idk what!')
+        return stdout, stderr
+
+    return
 
 
 def execute_model_deprecated(model, data):
@@ -55,39 +55,3 @@ def execute_model_deprecated(model, data):
     if process.wait() != 0:
         print('Model run terminated!')
     # pass
-
-
-def execute_model(model, data):
-    """
-    mode: str
-        Model Name (l_pca or nl_pca)
-    data: ndarray
-        Numpy array non dominated solution.
-    """
-    # process = subprocess.Popen()
-    pass
-
-
-l_pca = make_obj_red(
-    'src/pca/l_pca_dmoss_kemoss/Debug')
-# nl_pca = make_obj_red(
-#     'src/pca/nl_mvu_pca_dmoss_kemoss/Debug')
-
-execute_model_deprecated("l_pca", 'src/dtlz5_2_5_moea.out')
-
-
-
-
-# NOT NEEDED ----- TRY RUN
-# with open('src/dtlz5_2_5_moea.out', 'r') as f:
-#     input_data = f.read()
-
-# print(input_data)
-# # nd_data = input_data.split(' ')
-# # print(nd_data)
-# nd_array = np.array(list(input_data))
-
-# print(nd_array)
-
-# print(nd_array)
-# TRY RUN ---- NUMPY TO CTYPE DATA CONversion

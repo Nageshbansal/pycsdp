@@ -18,7 +18,12 @@
 
 #include "global.h"
 
-int main(int argc, char *argv[]) {
+int main(double *pdata, int *ncols, int *nrows) {
+    /*
+    in_data: adress of the first element of input array
+    ncols: no of columns
+    nrows: no of rows
+    */
 
     FILE *infile;
     int rows;
@@ -47,49 +52,55 @@ int main(int argc, char *argv[]) {
     		{NULL, 0, NULL, 0} /* marks end of list */
     };
 
-    while (0 < (opt = getopt_long(argc, argv, "s:Vvh",
-                                  long_options, &longopt_index))) {
+    // while (0 < (opt = getopt_long(argc, argv, "s:Vvh",
+    //                               long_options, &longopt_index))) {
 
-        switch (opt) {
+    //     switch (opt) {
 
-        case 's':
-        	read_set=(char*)malloc(500*sizeof(char));
-        	pread_set=read_set;
-        	strcpy(read_set,optarg);
-        	break;
+    //     case 's':
+    //     	read_set=(char*)malloc(500*sizeof(char));
+    //     	pread_set=read_set;
+    //     	strcpy(read_set,optarg);
+    //     	break;
 
-        case 'V':
-        case 'v':/* --version */
-            version();
-            exit(EXIT_SUCCESS);
+    //     case 'V':
+    //     case 'v':/* --version */
+    //         version();
+    //         exit(EXIT_SUCCESS);
 
-        case '?':
-            /* getopt prints an error message right here */
-            fprintf(stderr, "Try `%s --help' for more information.\n", program_invocation_short_name);
-            exit(EXIT_FAILURE);
-        case 'h':
-            usage();
-            exit(EXIT_SUCCESS);
+    //     case '?':
+    //         /* getopt prints an error message right here */
+    //         fprintf(stderr, "Try `%s --help' for more information.\n", program_invocation_short_name);
+    //         exit(EXIT_FAILURE);
+    //     case 'h':
+    //         usage();
+    //         exit(EXIT_SUCCESS);
 
-        default: /* should never happen */
-            abort();
-        }
-    }
+    //     default: /* should never happen */
+    //         abort();
+    //     }
+    // }
 
-    if (optind < argc)
-        for (; optind < argc; optind++)
-            if (strncmp(argv[optind],"-", strlen("-")+1)) {
-                infile = fopen(argv[optind],"r");
-                if (infile == NULL) {
-                    fprintf (stderr, "%s: %s: %s\n", program_invocation_short_name, argv[optind], strerror(errno));
-                    exit(EXIT_FAILURE);
-                }
-                read_input(infile, argv[optind], &data, &nobj, &cumsizes, &nruns);
-                fclose(infile);
-            } else
-                read_input(stdin, "stdin", &data, &nobj, &cumsizes, &nruns);
-    else
-        read_input(stdin, "stdin", &data, &nobj, &cumsizes, &nruns);
+
+    // if (optind < argc)
+    //     for (; optind < argc; optind++)
+    //         if (strncmp(argv[optind],"-", strlen("-")+1)) {
+    //             infile = fopen(argv[optind],"r");
+    //             if (infile == NULL) {
+    //                 fprintf (stderr, "%s: %s: %s\n", program_invocation_short_name, argv[optind], strerror(errno));
+    //                 exit(EXIT_FAILURE);
+    //             }
+    //             read_input(infile, argv[optind], &data, &nobj, &cumsizes, &nruns);
+    //             fclose(infile);
+    //         } else
+    //             read_input(stdin, "stdin", &data, &nobj, &cumsizes, &nruns);
+    // else
+    //     read_input(stdin, "stdin", &data, &nobj, &cumsizes, &nruns);
+
+    data = pdata;
+    nobj = nrows;
+    cumsizes = *ncols;
+    /*nruns is 1 tho I didn't check, nobj is basically no of rows, cumsizes is no of columns*/
 
     objset=(int*) malloc(nobj*sizeof(int));
 

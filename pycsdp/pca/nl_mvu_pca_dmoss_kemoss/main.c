@@ -18,23 +18,11 @@
 
 #include "global.h"
 
-void my_c_function(double *data, int nrows, int ncols) {
-    double (*arr)[ncols] = (double (*)[ncols]) data;
-    int i,j ;
-    printf("Array received from Python:\n");
-    printf("%f ", arr[0][0]);
-    printf("%f ", arr[0][1]);
-    printf("%f ", arr[0][2]);
-    printf("%f ", arr[0][3]);
-    printf("%f ", arr[0][4]);
-
-}
-
-int main(int argc, char *argv[]) {
+int main(double *data, int ncols, int nrows)
+{
 
     FILE *infile;
     int rows;
-    double *data = NULL;
     int objset_size, i, j;
     char* read_set=NULL;
     char* pread_set=NULL;
@@ -59,7 +47,7 @@ int main(int argc, char *argv[]) {
     		{NULL, 0, NULL, 0} /* marks end of list */
     };
 
-    while (0 < (opt = getopt_long(argc, argv, "s:Vvh",
+    /*while (0 < (opt = getopt_long(argc, argv, "s:Vvh",
                                   long_options, &longopt_index))) {
 
         switch (opt) {
@@ -71,24 +59,24 @@ int main(int argc, char *argv[]) {
         	break;
 
         case 'V':
-        case 'v':/* --version */
+        case 'v':/* --version *//*
             version();
             exit(EXIT_SUCCESS);
 
         case '?':
-            /* getopt prints an error message right here */
+            /* getopt prints an error message right here *//*
             fprintf(stderr, "Try `%s --help' for more information.\n", program_invocation_short_name);
             exit(EXIT_FAILURE);
         case 'h':
             usage();
             exit(EXIT_SUCCESS);
 
-        default: /* should never happen */
+        default: /* should never happen *//*
             abort();
         }
-    }
+    }*/
 
-    if (optind < argc)
+    /*if (optind < argc)
         for (; optind < argc; optind++)
             if (strncmp(argv[optind],"-", strlen("-")+1)) {
                 infile = fopen(argv[optind],"r");
@@ -101,8 +89,10 @@ int main(int argc, char *argv[]) {
             } else
                 read_input(stdin, "stdin", &data, &nobj, &cumsizes, &nruns);
     else
-        read_input(stdin, "stdin", &data, &nobj, &cumsizes, &nruns);
+        read_input(stdin, "stdin", &data, &nobj, &cumsizes, &nruns);*/
 
+    nobj = nrows;
+    cumsizes = ncols;
     objset=(int*) malloc(nobj*sizeof(int));
 
     if(read_set) {
@@ -122,8 +112,7 @@ int main(int argc, char *argv[]) {
     		objset[i]=i;
     }
 
-    rows = cumsizes[nruns-1];
-    popsize=rows;
+    popsize=cumsizes;
 
     objectives = perform_conversion(data, nobj, popsize);
 

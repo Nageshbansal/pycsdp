@@ -18,7 +18,7 @@
 
 #include "global.h"
 
-int main(double *pdata, int *ncols, int *nrows) {
+int main(double *data, int ncols, int nrows) {
     /*
     in_data: adress of the first element of input array
     ncols: no of columns
@@ -27,7 +27,7 @@ int main(double *pdata, int *ncols, int *nrows) {
 
     FILE *infile;
     int rows;
-    double *data = NULL;
+    /*double *data = NULL;*/
     int objset_size, i, j;
     char* read_set=NULL;
     char* pread_set=NULL;
@@ -52,77 +52,83 @@ int main(double *pdata, int *ncols, int *nrows) {
     		{NULL, 0, NULL, 0} /* marks end of list */
     };
 
-    // while (0 < (opt = getopt_long(argc, argv, "s:Vvh",
-    //                               long_options, &longopt_index))) {
+    /*
+    while (0 < (opt = getopt_long(argc, argv, "s:Vvh",
+                                  long_options, &longopt_index))) {
 
-    //     switch (opt) {
+        switch (opt) {
 
-    //     case 's':
-    //     	read_set=(char*)malloc(500*sizeof(char));
-    //     	pread_set=read_set;
-    //     	strcpy(read_set,optarg);
-    //     	break;
+        case 's':
+        	read_set=(char*)malloc(500*sizeof(char));
+        	pread_set=read_set;
+        	strcpy(read_set,optarg);
+        	break;
 
-    //     case 'V':
-    //     case 'v':/* --version */
-    //         version();
-    //         exit(EXIT_SUCCESS);
+        case 'V':
+        case 'v':/* --version *//*
+            version();
+            exit(EXIT_SUCCESS);
 
-    //     case '?':
-    //         /* getopt prints an error message right here */
-    //         fprintf(stderr, "Try `%s --help' for more information.\n", program_invocation_short_name);
-    //         exit(EXIT_FAILURE);
-    //     case 'h':
-    //         usage();
-    //         exit(EXIT_SUCCESS);
+        case '?':
+            /* getopt prints an error message right here *//*
+            fprintf(stderr, "Try `%s --help' for more information.\n", program_invocation_short_name);
+            exit(EXIT_FAILURE);
+        case 'h':
+            usage();
+            exit(EXIT_SUCCESS);
 
-    //     default: /* should never happen */
-    //         abort();
-    //     }
-    // }
+        default: /* should never happen *//*
+            abort();
+        }
+    }
+    */
 
+    /*
+    if (optind < argc)
+        for (; optind < argc; optind++)
+            if (strncmp(argv[optind],"-", strlen("-")+1)) {
+                infile = fopen(argv[optind],"r");
+                if (infile == NULL) {
+                    fprintf (stderr, "%s: %s: %s\n", program_invocation_short_name, argv[optind], strerror(errno));
+                    exit(EXIT_FAILURE);
+                }
+                read_input(infile, argv[optind], &data, &nobj, &cumsizes, &nruns);
+                fclose(infile);
+            } else
+                read_input(stdin, "stdin", &data, &nobj, &cumsizes, &nruns);
+    else
+        read_input(stdin, "stdin", &data, &nobj, &cumsizes, &nruns); */
 
-    // if (optind < argc)
-    //     for (; optind < argc; optind++)
-    //         if (strncmp(argv[optind],"-", strlen("-")+1)) {
-    //             infile = fopen(argv[optind],"r");
-    //             if (infile == NULL) {
-    //                 fprintf (stderr, "%s: %s: %s\n", program_invocation_short_name, argv[optind], strerror(errno));
-    //                 exit(EXIT_FAILURE);
-    //             }
-    //             read_input(infile, argv[optind], &data, &nobj, &cumsizes, &nruns);
-    //             fclose(infile);
-    //         } else
-    //             read_input(stdin, "stdin", &data, &nobj, &cumsizes, &nruns);
-    // else
-    //     read_input(stdin, "stdin", &data, &nobj, &cumsizes, &nruns);
-
-    data = pdata;
+    /*data = &pdata;*/
     nobj = nrows;
-    cumsizes = *ncols;
+    cumsizes = ncols;
+
+    printf("data: %f nobj: %d cumsize: %d\n", *(data+1), nobj, cumsizes);
     /*nruns is 1 tho I didn't check, nobj is basically no of rows, cumsizes is no of columns*/
 
     objset=(int*) malloc(nobj*sizeof(int));
+    
 
     if(read_set) {
-    	objset_size=0;
-    	while( sscanf(read_set,"%d%n",&i,&j)==1 ) {
-    		objset[objset_size]=i-1;
-    		read_set+=j;
-    		objset_size++;
-    	}
-    	if(objset_size != nobj) {
-    		printf("The number of objectives in the Set must be equal to number of provided objectives\n");
-    		exit(-1);
-    	}
+        objset_size=0;
+        while( sscanf(read_set,"%d%n",&i,&j)==1 ) {
+            objset[objset_size]=i-1;
+            read_set+=j;
+            objset_size++;
+        }
+        if(objset_size != nobj) {
+            printf("The number of objectives in the Set must be equal to number of provided objectives\n");
+            exit(-1);
+        }
     }
     else {
-    	for(i=0;i<nobj;i++)
-    		objset[i]=i;
+        for(i=0;i<nobj;i++)
+            objset[i]=i;
     }
 
-    rows = cumsizes[nruns-1];
-    popsize=rows;
+    popsize = cumsizes;
+
+    printf("popsize: %d\n", popsize);
 
     objectives = perform_conversion(data, nobj, popsize);
 
@@ -131,7 +137,10 @@ int main(double *pdata, int *ncols, int *nrows) {
     /**********************/
     k_neighbours=nobj-1;
     theta=0.997;
-    fs=framework(objectives, nobj, popsize, k_neighbours, theta);
+    printf("nobj: %d", nobj);
+    fs = framework(objectives, nobj, popsize, k_neighbours, theta);
+    for (i = 0; i < fs->size; i++)
+        printf("fs: %f\n",*(fs->data+i));
 
     new_nobj=0;
     for(i=0;i<nobj;i++) {
@@ -143,8 +152,8 @@ int main(double *pdata, int *ncols, int *nrows) {
     printf("(Fs) =");
     for(i=0;i<nobj;i++) {
     	if( gsl_vector_get(fs,i)==1.0 ) {
-    		printf(" %d",objset[i]+1);
-    	}
+            printf(" %d", objset[i] + 1);
+        }
     }
     printf("\n");
     printf("Size = %d\n",new_nobj);

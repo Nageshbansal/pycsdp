@@ -33,14 +33,20 @@ def nl_pca_reduction(arr, path, ver=__VERSION__):
 
     # TODO add steps for make nl_pca
     shape = arr.shape
-    dtype = arr.dtype
+    # dtype = arr.dtype
     nl_lib = ctypes.CDLL(os.path.join(path, 'nl_mvu_pca_dmoss_kemoss.so'))
 
-    nl_fn = nl_lib.my_c_function
-    nl_fn.argtypes = [np.ctypeslib.ndpointer(dtype=dtype, ndim=len(shape), shape=shape, flags='C_CONTIGUOUS')]
-    nl_fn.restype = None
+    nl_fn = nl_lib.main
+    # nl_fn.argtypes = [np.ctypeslib.ndpointer(dtype=dtype, ndim=len(shape), shape=shape, flags='C_CONTIGUOUS')]
+    # nl_fn.restype = None
 
-    nl_fn(arr)
+    c_double_p = ctypes.POINTER(ctypes.c_double)
+    # c_int_p = ctypes.POINTER(ctypes.c_int)
+    # data = arr.astype(np.float32)
+    data_p = arr.ctypes.data_as(c_double_p)
+    nl_fn.argtypes = (c_double_p, ctypes.c_int, ctypes.c_int)
+
+    nl_fn(data_p, shape[0], shape[1])
     # TODO add return outputs of nl_pca
     return
 
@@ -49,14 +55,17 @@ def l_pca_reduction(arr, path, ver=__VERSION__):
 
     # TODO add steps for make nl_pca
     shape = arr.shape
-    dtype = arr.dtype
-    print(path)
-    l_lib = ctypes.CDLL('/home/nageshbansal/soc/lpb/pycsdp/pycsdp/pca/l_pca_dmoss_kemoss/Release/l_pca_dmoss_kemoss.so')
+    # dtype = arr.dtype
+    l_lib = ctypes.CDLL(os.path.join(path, 'l_pca_dmoss_kemoss.so'))
 
-    l_fn = l_lib.my_c_function
-    l_fn.argtypes = [np.ctypeslib.ndpointer(dtype=dtype, ndim=len(shape), shape=shape, flags='C_CONTIGUOUS')]
-    l_fn.restype = None
-
-    l_fn(arr)
+    l_fn = l_lib.main
+    # l_fn.argtypes = [np.ctypeslib.ndpointer(dtype=dtype, ndim=len(shape), shape=shape, flags='C_CONTIGUOUS')]
+    # l_fn.argtyes = [ctypes.POINTER(ctypes.c_double), ctypes.c_int, ctypes.c_int]
+    c_double_p = ctypes.POINTER(ctypes.c_double)
+    # c_int_p = ctypes.POINTER(ctypes.c_int)
+    # data = arr.astype(np.float32)
+    data_p = arr.ctypes.data_as(c_double_p)
+    l_fn.argtypes = (c_double_p, ctypes.c_int, ctypes.c_int)
+    l_fn(data_p, shape[0], shape[1])
     # TODO add return outputs of nl_pca
     return

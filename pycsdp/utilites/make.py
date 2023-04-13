@@ -1,7 +1,6 @@
 import numpy as np
 import subprocess
 
-
 # target:  is to execute both makefiles in nl_mvu_pca_dmoss and
 # l_pca_dmoss_kemoss. get the output...that is a string. We need
 # to convert the string output to list/ndarray in python
@@ -18,9 +17,9 @@ def make_obj_red(path):
     outfile
     """
 
-    process = subprocess.Popen(
-        f"make clean -C {path} && make -C {path}", stderr=subprocess.STDOUT,
-        shell=True)
+    process = subprocess.Popen(f"make clean -C {path} && make -C {path}",
+                               stderr=subprocess.STDOUT,
+                               shell=True)
 
     stdout, stderr = process.communicate()
 
@@ -49,9 +48,7 @@ def execute_model_deprecated(model, data):
     elif model == 'l_pca':
         path = 'src/pca/l_pca_dmoss_kemoss/Debug/l_pca_dmoss_kemoss'
 
-    process = subprocess.Popen(
-        f"./{path} {data}", stderr=subprocess.STDOUT,
-        shell=True)
+    process = subprocess.Popen(f"./{path} {data}", stderr=subprocess.STDOUT, shell=True)
     if process.wait() != 0:
         print('Model run terminated!')
     # pass

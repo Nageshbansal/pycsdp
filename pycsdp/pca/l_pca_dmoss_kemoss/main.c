@@ -18,17 +18,15 @@
 
 #include "global.h"
 
+
 int free_fs(int *fs)
 {
-    printf("freeing address: %p\n", fs);
-    printf("freeing value: %d\n", *fs);
-    printf("freeing value: %d\n", *(fs+1));
-    printf("freeing value: %d\n", *(fs+2));
     free(fs);
     return 0;
 }
 
-int *main(double *data, int ncols, int nrows) {
+
+int main(double *data, int ncols, int nrows) {
     /*
     in_data: adress of the first element of input array
     ncols: no of columns
@@ -135,7 +133,7 @@ int *main(double *data, int ncols, int nrows) {
     }
 
     popsize = cumsizes;
-    
+
     objectives = perform_conversion(data, nobj, popsize);
 
     /**********************/
@@ -143,6 +141,7 @@ int *main(double *data, int ncols, int nrows) {
     /**********************/
     k_neighbours=nobj-1;
     theta=0.997;
+
     fs = framework(objectives, nobj, popsize, k_neighbours, theta);
 
     new_nobj=0;
@@ -157,6 +156,7 @@ int *main(double *data, int ncols, int nrows) {
     Fs = (int *)malloc(new_nobj * sizeof(int));
     int fs_size = 0;
     for(i=0;i<nobj;i++) {
+
         if (gsl_vector_get(fs, i) == 1.0)
         {
             Fs[fs_size] = objset[i] + 1;

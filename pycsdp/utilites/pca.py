@@ -2,7 +2,6 @@
 
 import ctypes
 import os
-import numpy as np
 from pycsdp.utilites import defaults, make
 import time
 
@@ -48,6 +47,7 @@ def nl_pca_reduction(arr, path, ver=__VERSION__):
     fs_ptr = nl_fn(data_p, shape[0], shape[1])
     fs_data = np.ctypeslib.as_array(fs_ptr, shape=(2,))
     return fs_data
+
 
 
 def l_pca_reduction(arr, path, ver=__VERSION__):

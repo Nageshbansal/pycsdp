@@ -18,10 +18,15 @@
 
 #include "global.h"
 
+int free_fs(int *fs)
+{   
+    printf("freeing address %p",fs);
+    free(fs);
+    return 0;
+}
+
 int *main(double *data, int ncols, int nrows)
 {
-
-    FILE *infile;
     int rows;
     int objset_size, i, j;
     char* read_set=NULL;
@@ -149,7 +154,7 @@ int *main(double *data, int ncols, int nrows)
     free(objset);
     gsl_matrix_free(objectives);
     free(data);
-
+    
     /* exit(EXIT_SUCCESS);*/
     printf("\nallocated address: %p\n", Fs);
     return Fs;

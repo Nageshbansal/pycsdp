@@ -20,20 +20,20 @@
 
 
 int free_fs(int *fs)
-{
+{   
+    printf("freeing address %p",fs);
     free(fs);
     return 0;
 }
 
 
-int main(double *data, int ncols, int nrows) {
+int *main(double *data, int ncols, int nrows) {
     /*
     in_data: adress of the first element of input array
     ncols: no of columns
     nrows: no of rows
     */
 
-    FILE *infile;
     int rows;
     /*double *data = NULL;*/
     int objset_size, i, j;
@@ -171,9 +171,8 @@ int main(double *data, int ncols, int nrows) {
     free(objset);
     gsl_matrix_free(objectives);
     free(data);
-
     /*exit(EXIT_SUCCESS);*/
-    printf("\nallocated address: %p\n", Fs);
+    /* printf("\nallocated address: %p\n", Fs); */
     return Fs;
 }
 

@@ -17,7 +17,7 @@ def make_obj_red(path):
     outfile
     """
 
-    process = subprocess.Popen(f"make clean -C {path} && make -C {path}",
+    process = subprocess.Popen(f"make clean -C {path} && make -w -C {path}",
                                stderr=subprocess.STDOUT,
                                shell=True)
 
@@ -30,6 +30,25 @@ def make_obj_red(path):
     return
 
 
+def make_clean(path):
+    """To execute the makefile using subprocess
+
+    Returns
+    -------
+    outfile
+    """
+
+    process = subprocess.Popen(f"make clean -C {path}",
+                               stderr=subprocess.STDOUT,
+                               shell=True)
+
+    stdout, stderr = process.communicate()
+
+    if process.wait() != 0:
+        print('Something went wrong, idk what!')
+        return stdout, stderr
+
+    return
 def execute_model_deprecated(model, data):
     """This method shows how the older vesion works
 

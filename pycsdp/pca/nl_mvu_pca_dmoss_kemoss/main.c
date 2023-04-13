@@ -18,7 +18,7 @@
 
 #include "global.h"
 
-int main(double *data, int ncols, int nrows)
+int *main(double *data, int ncols, int nrows)
 {
 
     FILE *infile;
@@ -32,6 +32,7 @@ int main(double *data, int ncols, int nrows)
     int *cumsizes = NULL;
     gsl_vector* fs;
     int new_nobj;
+    int *Fs;
 
     int opt; /* it's actually going to hold a char */
     int longopt_index;
@@ -93,6 +94,7 @@ int main(double *data, int ncols, int nrows)
 
     nobj = nrows;
     cumsizes = ncols;
+    
     objset=(int*) malloc(nobj*sizeof(int));
 
     if(read_set) {
@@ -131,13 +133,15 @@ int main(double *data, int ncols, int nrows)
     }
 
     printf("(Fs) =");
+    Fs = (int *)malloc(nobj * sizeof(int));
+    int fs_size = 0;
     for(i=0;i<nobj;i++) {
     	if( gsl_vector_get(fs,i)==1.0 ) {
-    		printf(" %d",objset[i]+1);
-    	}
+            Fs[fs_size] = objset[i] + 1;
+            printf(" %d", Fs[fs_size]);
+            fs_size++;
+        }
     }
-    printf("\n");
-    printf("Size = %d\n",new_nobj);
 
     gsl_vector_free(fs);
     if(pread_set)
@@ -146,7 +150,9 @@ int main(double *data, int ncols, int nrows)
     gsl_matrix_free(objectives);
     free(data);
 
-    exit(EXIT_SUCCESS);
+    /* exit(EXIT_SUCCESS);*/
+    printf("\nallocated address: %p\n", Fs);
+    return Fs;
 }
 
 gsl_matrix* perform_conversion(const double* data, int nobj, int rows) {

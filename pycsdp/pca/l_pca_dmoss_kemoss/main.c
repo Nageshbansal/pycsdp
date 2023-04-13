@@ -18,7 +18,17 @@
 
 #include "global.h"
 
-int main(double *data, int ncols, int nrows) {
+int free_fs(int *fs)
+{
+    printf("freeing address: %p\n", fs);
+    printf("freeing value: %d\n", *fs);
+    printf("freeing value: %d\n", *(fs+1));
+    printf("freeing value: %d\n", *(fs+2));
+    free(fs);
+    return 0;
+}
+
+int *main(double *data, int ncols, int nrows) {
     /*
     in_data: adress of the first element of input array
     ncols: no of columns
@@ -37,6 +47,7 @@ int main(double *data, int ncols, int nrows) {
     int *cumsizes = NULL;
     gsl_vector* fs;
     int new_nobj;
+    int *Fs;
 
     int opt; /* it's actually going to hold a char */
     int longopt_index;
@@ -103,9 +114,6 @@ int main(double *data, int ncols, int nrows) {
     nobj = nrows;
     cumsizes = ncols;
 
-    printf("data: %f nobj: %d cumsize: %d\n", *(data+1), nobj, cumsizes);
-    /*nruns is 1 tho I didn't check, nobj is basically no of rows, cumsizes is no of columns*/
-
     objset=(int*) malloc(nobj*sizeof(int));
     
 
@@ -127,9 +135,7 @@ int main(double *data, int ncols, int nrows) {
     }
 
     popsize = cumsizes;
-
-    printf("popsize: %d\n", popsize);
-
+    
     objectives = perform_conversion(data, nobj, popsize);
 
     /**********************/
@@ -137,10 +143,7 @@ int main(double *data, int ncols, int nrows) {
     /**********************/
     k_neighbours=nobj-1;
     theta=0.997;
-    printf("nobj: %d", nobj);
     fs = framework(objectives, nobj, popsize, k_neighbours, theta);
-    for (i = 0; i < fs->size; i++)
-        printf("fs: %f\n",*(fs->data+i));
 
     new_nobj=0;
     for(i=0;i<nobj;i++) {
@@ -150,13 +153,17 @@ int main(double *data, int ncols, int nrows) {
     }
 
     printf("(Fs) =");
+    /*hard coded*/
+    Fs = (int *)malloc(new_nobj * sizeof(int));
+    int fs_size = 0;
     for(i=0;i<nobj;i++) {
-    	if( gsl_vector_get(fs,i)==1.0 ) {
-            printf(" %d", objset[i] + 1);
+        if (gsl_vector_get(fs, i) == 1.0)
+        {
+            Fs[fs_size] = objset[i] + 1;
+            printf(" %d", Fs[fs_size]);
+            fs_size++;
         }
     }
-    printf("\n");
-    printf("Size = %d\n",new_nobj);
 
     gsl_vector_free(fs);
     if(pread_set)
@@ -165,7 +172,9 @@ int main(double *data, int ncols, int nrows) {
     gsl_matrix_free(objectives);
     free(data);
 
-    exit(EXIT_SUCCESS);
+    /*exit(EXIT_SUCCESS);*/
+    printf("\nallocated address: %p\n", Fs);
+    return Fs;
 }
 
 gsl_matrix* perform_conversion(const double* data, int nobj, int rows) {
@@ -180,6 +189,8 @@ gsl_matrix* perform_conversion(const double* data, int nobj, int rows) {
     }
     return objectives;
 }
+
+
 
 void usage(void) {
     printf("\nUsage: %s [OPTIONS] [FILE...]\n\n", program_invocation_short_name);

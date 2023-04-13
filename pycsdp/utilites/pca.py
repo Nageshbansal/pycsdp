@@ -9,6 +9,30 @@ import numpy as np
 __VERSION__ = 'Release'
 
 
+def _clean_pca(model='all'):
+    """Cleans all generated file dring make.
+
+    Parameters
+    ----------
+    model: str
+        l_pca, nl_pca, all (default: all)
+    """
+
+    nl_paths = [defaults.get_nlpca("Debug"), defaults.get_nlpca("Release")]
+    l_paths = [defaults.get_lpca("Debug"), defaults.get_lpca("Release")]
+    rm_paths = []
+
+    if model == 'all':
+        rm_paths = nl_paths + l_paths
+    elif model == 'nl_pca':
+        rm_paths = nl_paths
+    elif model == 'l_pca':
+        rm_paths = l_paths
+
+    for mpath in rm_paths:
+        make.make_clean(mpath)
+
+
 def pca_reduction(model, arr, ver=__VERSION__):
 
     if model == 'nl_pca':

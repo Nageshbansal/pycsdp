@@ -49,6 +49,8 @@ def make_clean(path):
         return stdout, stderr
 
     return
+
+
 def execute_model_deprecated(model, data):
     """This method shows how the older vesion works
 

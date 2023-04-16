@@ -10,4 +10,3 @@ print(arr.shape)
 nl_fn, free_fs = pca.pca_reduction('nl_pca', arr)
 out = pca.nl_pca_reduction(arr, nl_fn, free_fs)
 pca._clean_pca('nl_pca')
-

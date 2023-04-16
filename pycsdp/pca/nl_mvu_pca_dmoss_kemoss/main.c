@@ -20,7 +20,7 @@
 
 int free_fs(int *fs)
 {   
-    printf("freeing address %p",fs);
+    /* printf("freeing address %p",fs); */
     free(fs);
     return 0;
 }
@@ -138,7 +138,7 @@ int *main(double *data, int ncols, int nrows)
     }
 
     printf("(Fs) =");
-    Fs = (int *)malloc(nobj * sizeof(int));
+    Fs = malloc(sizeof(int) *new_nobj);
     int fs_size = 0;
     for(i=0;i<nobj;i++) {
     	if( gsl_vector_get(fs,i)==1.0 ) {
@@ -156,7 +156,7 @@ int *main(double *data, int ncols, int nrows)
     free(data);
     
     /* exit(EXIT_SUCCESS);*/
-    printf("\nallocated address: %p\n", Fs);
+    /* printf("\nallocated address: %p\n", Fs); */
     return Fs;
 }
 

@@ -3,15 +3,10 @@ from pycsdp.utilites import pca
 
 
 
-arr = np.loadtxt('/home/shivam/Programming/skip-the-beats/src/dtlz5_2_5_moea.out')
+arr = np.loadtxt('/home/nageshbansal/soc/lpb/objective_reduction/dtlz5_2_5_moea.out')
 
 
 print(arr.shape)
-
-# nl_pca = pca.pca_reduction('nl_pca', arr)
-# nl_pca_debug = pca.pca_reduction('nl_pca', arr, 'Debug')
-# l_pca = pca.pca_reduction('l_pca', arr)
-# print(l_pca)
-# l_pca_debug = pca.pca_reduction('nl_pca', arr, 'Debug')
-
-pca._clean_pca()
+nl_fn, free_fs = pca.pca_reduction('nl_pca', arr)
+out = pca.nl_pca_reduction(arr, nl_fn, free_fs)
+pca._clean_pca('nl_pca')
